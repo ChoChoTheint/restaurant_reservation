@@ -12,6 +12,8 @@
                     New Category
                 </a>
             </div>
+
+
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -50,7 +52,7 @@
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                    <div class="flex space-x-2">
                     <a href="{{ route('admin.categories.edit',$category->id) }}" class="px-4 py-2 bg-green-500 text-white rounded">Edit</a>
-                    <form class="px-4 py-2 bg-red-500 rounded text-white" action="{{ route('admin.categories.destory',$category->id) }}" method="post" onsubmit="return confirm('Are You sure?');">
+                    <form class="px-4 py-2 bg-red-500 rounded text-white" action="{{ route('admin.categories.destroy',$category->id) }}" method="post" onsubmit="return confirm('Are You sure?');">
                          @csrf
                          @method('DELETE')
                          <button type="submit">Delete</button>
@@ -63,6 +65,10 @@
         </tbody>
     </table>
 </div>
+
+<!-- <div class="text-center">
+    <h3>No data Found</h3>
+</div> -->
 
         </div>
     </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Stmt\Catch_;
 
@@ -53,16 +54,18 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Category $category,$id)
     {
+        $category = Category::find($id);
         return view('admin.categories.edit',compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Category $category)
+    public function update(Request $request,Category $category,$id)
     {
+        $category = Category::find($id);
         $request->validate([
             'name' => 'required',
             'description' => 'required'
@@ -72,19 +75,28 @@ class CategoryController extends Controller
             Storage::delete(($category->image));
             $image = $request->file('image')->store('public/categories');
         }
-        $category->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $image
-        ]);
+        try {
+            $category->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'image' => $image
+            ]);
+        } catch (\Exception $e) {
+            return to_route('admin.categories.edit');
+        }
+        
+        
         return to_route('admin.categories.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category,$id)
     {
-        //
+        $category = Category::find($id);
+        Storage::delete($category->image);
+        $category->delete();
+        return to_route('admin.categories.index');
     }
 }

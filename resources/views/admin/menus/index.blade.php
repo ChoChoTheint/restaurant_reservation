@@ -1,3 +1,4 @@
+<!-- ession_start(); -->
 <x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -10,20 +11,27 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <div class="flex justify-end m-2 p-2">
                 <a href="{{ route('admin.menus.create') }}" class="px-4 py-2 bg-indigo-500 text-white">
-                    New Menu
+                    New Menu 
                 </a>
+            </div>
+            <div>
+                @if(session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
             </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
-                    Product name
+                    Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Color
+                   Description
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Category
+                    Image
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Price
@@ -34,91 +42,38 @@
             </tr>
         </thead>
         <tbody>
+            @foreach($menus as $menu)
             <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
-                </th>
-                <td class="px-6 py-4">
-                    Silver
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ $menu->name}}
                 </td>
-                <td class="px-6 py-4">
-                    Laptop
+                
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ $menu->description}}
                 </td>
-                <td class="px-6 py-4">
-                    $2999
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <img src="{{ Storage::url($menu->image) }}" alt="pic" class="w-16 h-16 rounded">
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ $menu->price}}
                 </td>
+            
+               
+
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                   <div class="flex space-x-2">
+                    <a href="{{ route('admin.menus.edit',$menu->id) }}" class="px-4 py-2 bg-green-500 text-white rounded">Edit</a>
+                    <form class="px-4 py-2 bg-red-500 rounded text-white" action="{{ route('admin.menus.destroy',$menu->id) }}" method="post" onsubmit="return confirm('Are You sure?');">
+                         @csrf
+                         @method('DELETE')
+                         <button type="submit">Delete</button>
+                    </form>
+                   </div>
+                </td>
+                
             </tr>
-            <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Microsoft Surface Pro
-                </th>
-                <td class="px-6 py-4">
-                    White
-                </td>
-                <td class="px-6 py-4">
-                    Laptop PC
-                </td>
-                <td class="px-6 py-4">
-                    $1999
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Magic Mouse 2
-                </th>
-                <td class="px-6 py-4">
-                    Black
-                </td>
-                <td class="px-6 py-4">
-                    Accessories
-                </td>
-                <td class="px-6 py-4">
-                    $99
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Google Pixel Phone
-                </th>
-                <td class="px-6 py-4">
-                    Gray
-                </td>
-                <td class="px-6 py-4">
-                    Phone
-                </td>
-                <td class="px-6 py-4">
-                    $799
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple Watch 5
-                </th>
-                <td class="px-6 py-4">
-                    Red
-                </td>
-                <td class="px-6 py-4">
-                    Wearables
-                </td>
-                <td class="px-6 py-4">
-                    $999
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
+            @endforeach
+            
         </tbody>
     </table>
 </div>

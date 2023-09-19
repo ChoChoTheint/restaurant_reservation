@@ -40,11 +40,16 @@ Route::middleware('auth','admin')->name('admin.')->prefix('admin')->group(functi
     Route::get('/categories/create',[CategoryController::class,'create'])->name('categories.create');
     Route::post('/categories/store',[CategoryController::class,'store'])->name('categories.store');
     Route::get('/categories/edit/{id}',[CategoryController::class,'edit'])->name('categories.edit');
-    Route::post('/categories/update/{id}',[CategoryController::class,'update'])->name('categories.update');
-    Route::delete('/categories/destory/{id}',[CategoryController::class,'destory'])->name('categories.destory');
+    Route::match(['put', 'post'],'/categories/update/{id}',[CategoryController::class,'update'])->name('categories.update');
+    Route::delete('/categories/destroy/{id}',[CategoryController::class,'destroy'])->name('categories.destroy');
 
     Route::get('/menus',[MenuController::class,'index'])->name('menus.index');
     Route::get('/menus/create',[MenuController::class,'create'])->name('menus.create');
+    Route::post('/menus/store',[MenuController::class,'store'])->name('menus.store');
+    Route::get('/menus/edit/{id}',[MenuController::class,'edit'])->name('menus.edit');
+    Route::match(['put', 'post'],'/menus/update/{id}',[MenuController::class,'update'])->name('menus.update');
+    Route::delete('/menus/destroy/{id}',[MenuController::class,'destroy'])->name('menus.destroy');
+
     Route::get('/tables',[TableController::class,'index'])->name('tables.index');
     Route::get('/tables/create',[TableController::class,'create'])->name('tables.create');
     Route::get('/reservation',[ReservationController::class,'index'])->name('reservation.index');

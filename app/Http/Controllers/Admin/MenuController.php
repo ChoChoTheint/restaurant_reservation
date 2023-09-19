@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\MenuStoreRequest;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -13,8 +16,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menu = Menu::all();
-        return view('admin.menus.index',compact('menu'));
+        $menus = Menu::all();
+        return view('admin.menus.index',compact('menus'));
     }
 
     /**
@@ -22,15 +25,26 @@ class MenuController extends Controller
      */
     public function create()
     {
-        return view('admin.menus.create');
+        $categories = Category::all();
+        return view('admin.menus.create',compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MenuStoreRequest $request)
     {
-        //
+        $image = $request->file('image')->store('public/menus');
+        $menu = Menu::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $image,
+            'price' => $request->price
+        ]);
+        if($request->has('categories')){
+            $menu->categories()->attach($request->categories);
+        }
+        return to_route('admin.menus.index');
     }
 
     /**
@@ -60,8 +74,13 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Menu $menu, $id)
+    { 
+        $menu = Menu::find($id);
+        Storage::delete($menu->image);
+        $menu->categories()->detach();
+        $menu->delete();
+        return to_route('admin.menus.index')->with('success', 'Menu deleted successfully.');
+        
     }
 }
