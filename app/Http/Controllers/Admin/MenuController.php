@@ -60,15 +60,45 @@ class MenuController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $menus = Menu::find($id);
+        $categories = Category::all();
+        return view('admin.menus.edit',compact('menus','categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,Menu $menus, $id)
     {
-        //
+        
+        $menus = Menu::find($id);
+        
+        $request->validate([
+            'name' => 'required',
+            'price' =>'required',
+            'description' => 'required'   
+        ]);
+        
+        $image = $menus->image;
+        if($request->hasFile('image')){
+            Storage::delete(($menus->image));
+            $image = $request->file('image')->store('public/menus');
+        }
+        
+        try {
+            $menus->update([
+                'name' => $request->name,
+                'price' =>$request->price,
+                'description' => $request->description,
+                'image' => $image
+            ]);
+        } catch (\Exception $e) {
+            dd('hi');
+            return to_route('admin.menus.edit');
+        }
+        
+        
+        return to_route('admin.menus.index');
     }
 
     /**

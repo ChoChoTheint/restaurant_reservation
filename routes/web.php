@@ -52,6 +52,11 @@ Route::middleware('auth','admin')->name('admin.')->prefix('admin')->group(functi
 
     Route::get('/tables',[TableController::class,'index'])->name('tables.index');
     Route::get('/tables/create',[TableController::class,'create'])->name('tables.create');
+    Route::post('/tables/store',[TableController::class,'store'])->name('tables.store');
+    Route::get('/tables/edit/{id}',[TableController::class,'edit'])->name('tables.edit');
+    Route::match(['put', 'post'],'/tables/update/{id}',[TableController::class,'update'])->name('tables.update');
+    Route::delete('/tables/destroy/{id}',[TableController::class,'destroy'])->name('tables.destroy');
+
     Route::get('/reservation',[ReservationController::class,'index'])->name('reservation.index');
     Route::get('/reservation/create',[ReservationController::class,'create'])->name('reservation.create');
 });
