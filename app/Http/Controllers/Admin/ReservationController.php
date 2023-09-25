@@ -54,6 +54,7 @@ class ReservationController extends Controller
     public function edit(string $id)
     {
         $reservations = Reservation::find($id);
+        
         $tables = Table::all();
         return view('admin.reservation.edit',compact('reservations','tables'));
     }
@@ -65,9 +66,18 @@ class ReservationController extends Controller
     {
         
         $reservations = Reservation::find($id);
+    //    dd($reservations->all());
         try {
-            $reservations->update($request->validated());
-            
+            $reservations->update([
+                    'first_name' => $request->first_name,
+                    'last_name' =>$request->last_name,
+                    'email' => $request->email,
+                    'tel_number' => $request->tel_number,
+                    'res_date' => $request->email,
+                    'guest_number' => $request->guest_number,
+                    'table_id' => $request->table_id
+            ]);
+            dd($reservations->all());
         } catch (\Exception $e) {
             return view('admin.reservation.edit');
         }
