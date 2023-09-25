@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Table;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationStoreRequest;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -13,8 +17,8 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservation = Reservation::all();
-        return view('admin.reservation.index',compact('reservation'));
+        $reservations = Reservation::all();
+        return view('admin.reservation.index',compact('reservations'));
     }
 
     /**
@@ -22,15 +26,18 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        return view('admin.reservation.create');
+       
+        $tables = Table::all();
+        return view('admin.reservation.create',compact('tables'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReservationStoreRequest $request)
     {
-        //
+        Reservation::create($request->validated());
+        return to_route('admin.reservation.index')->with('success', 'Reservation created successfully.');
     }
 
     /**
@@ -46,7 +53,9 @@ class ReservationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $reservations = Reservation::find($id);
+        $tables = Table::all();
+        return view('admin.reservation.edit',compact('reservations','tables'));
     }
 
     /**
@@ -54,14 +63,25 @@ class ReservationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $reservations = Reservation::find($id);
+        try {
+            $reservations->update($request->validated());
+            
+        } catch (\Exception $e) {
+            return view('admin.reservation.edit');
+        }
+       
+        return view('admin.reservation.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Reservation $reservation,$id)
     {
-        //
+        $reservation = Reservation::find($id);
+        $reservation->delete();
+        return to_route('admin.reservation.index')->with('warning', 'Reservation deleted successfully.');
     }
 }

@@ -93,7 +93,6 @@ class MenuController extends Controller
                 'image' => $image
             ]);
         } catch (\Exception $e) {
-            dd('hi');
             return to_route('admin.menus.edit');
         }
         

@@ -59,6 +59,10 @@ Route::middleware('auth','admin')->name('admin.')->prefix('admin')->group(functi
 
     Route::get('/reservation',[ReservationController::class,'index'])->name('reservation.index');
     Route::get('/reservation/create',[ReservationController::class,'create'])->name('reservation.create');
+    Route::post('/reservation/store',[ReservationController::class,'store'])->name('reservation.store');
+    Route::get('/reservation/edit/{id}',[ReservationController::class,'edit'])->name('reservation.edit');
+    Route::match(['put', 'post'],'/reservation/update/{id}',[ReservationController::class,'update'])->name('reservation.update');
+    Route::delete('/reservation/destroy/{id}',[ReservationController::class,'destroy'])->name('reservation.destroy');
 });
 
 require __DIR__.'/auth.php';
