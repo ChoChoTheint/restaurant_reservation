@@ -40,7 +40,7 @@ class CategoryController extends Controller
             'description' => $request->description,
             'image' => $image
         ]);
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')->with('success','Category insert successfully ');
     }
 
     /**
@@ -86,7 +86,7 @@ class CategoryController extends Controller
         }
         
         
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')->with('updateSuccess','Category update successfully');
     }
 
     /**
@@ -97,6 +97,6 @@ class CategoryController extends Controller
         $category = Category::find($id);
         Storage::delete($category->image);
         $category->delete();
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')->with('danger','Category deleted successfully');
     }
 }

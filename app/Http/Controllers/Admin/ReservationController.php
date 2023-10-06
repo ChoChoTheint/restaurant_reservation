@@ -82,7 +82,7 @@ class ReservationController extends Controller
             return view('admin.reservation.edit');
         }
        
-        return view('admin.reservation.index');
+        return view('admin.reservation.index')->with('updateSuccess','Reservation update successfully ');
     }
 
     /**
@@ -92,6 +92,6 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::find($id);
         $reservation->delete();
-        return to_route('admin.reservation.index')->with('warning', 'Reservation deleted successfully.');
+        return to_route('admin.reservation.index')->with('danger', 'Reservation deleted successfully.');
     }
 }

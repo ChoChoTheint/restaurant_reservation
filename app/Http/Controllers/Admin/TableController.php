@@ -38,7 +38,7 @@ class TableController extends Controller
             'location' => $request->location,
         ]);
 
-        return to_route('admin.tables.index');
+        return to_route('admin.tables.index')->with('success','Table insert successfully ');
     }
 
     /**
@@ -80,7 +80,7 @@ class TableController extends Controller
         } catch (\Exception $e) {
             return to_route('admin.tables.edit');
         }
-        return to_route('admin.tables.index');
+        return to_route('admin.tables.index')->with('updateSuccess','Table update successfully ');
     }
 
     /**
@@ -90,6 +90,6 @@ class TableController extends Controller
     {
         $table = Table::find($id);
         $table->delete();
-        return to_route('admin.tables.index')->with('success', 'Menu deleted successfully.');
+        return to_route('admin.tables.index')->with('danger', 'Table deleted successfully.');
     }
 }

@@ -97,6 +97,23 @@
                     
       
         <main class="m-2 p-8">
+            <div>
+                @if (session()->has('danger'))
+                        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                            <span class="font-medium">Danger alert!</span> {{ session()->get('danger') }}
+                          </div>
+                @endif
+                @if (session()->has('success'))
+                        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                            <span class="font-medium">Success alert!</span> {{ session()->get('success') }}
+                          </div>
+                @endif
+                @if (session()->has('updateSuccess'))
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                    <span class="font-medium">Success alert!</span> {{ session()->get('updateSuccess') }}
+                  </div>
+                @endif
+            </div>
             {{ $slot }}
         </main>
     </div>
